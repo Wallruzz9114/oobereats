@@ -1,13 +1,12 @@
 import Head from 'next/head';
 
-import Layout, { siteTitle } from '../components/layout';
-
 const RootScreen = (): JSX.Element => (
-  <Layout home>
+  <div>
     <Head>
-      <title>{siteTitle}</title>
+      <title>UberEats</title>
     </Head>
-  </Layout>
+    <h1>It works!</h1>
+  </div>
 );
 
 export default RootScreen;

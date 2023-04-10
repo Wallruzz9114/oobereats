@@ -33,7 +33,7 @@
 		classnames = {};
 		description = {};
 
-		data.answers.forEach((answer, i) => {
+		data.answers.forEach((answer: string[], i: string | number) => {
 			const guess = data.guesses[i];
 
 			for (let i = 0; i < 5; i += 1) {
@@ -56,9 +56,7 @@
 	 */
 	function update(event: MouseEvent) {
 		const guess = data.guesses[i];
-		const key = (event.target as HTMLButtonElement).getAttribute(
-			'data-key'
-		);
+		const key = (event.target as HTMLButtonElement).getAttribute('data-key');
 
 		if (key === 'backspace') {
 			data.guesses[i] = guess.slice(0, -1);
