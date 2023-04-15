@@ -1,0 +1,106 @@
+import { Injectable, LoggerService } from '@nestjs/common';
+import * as winston from 'winston';
+import { ConfigService } from '../../config/services';
+import { LogLevel } from '../models';
+import { formatter } from './formatter';
+import { isLogLevel } from './is-log-level';
+
+@Injectable()
+export class Logger implements LoggerService {
+  public logger: winston.Logger;
+
+  public constructor(_configService: ConfigService) {
+    this.logger = winston.createLogger({
+      level: _configService.get().logLevel,
+      format: formatter(),
+    });
+
+    this.logger.add(
+      new winston.transports.Console({
+        format: winston.format.json(),
+        stderrLevels: [LogLevel.Error, LogLevel.Warn],
+      })
+    );
+  }
+
+  /**
+   * Writes a log message.
+   * @param level the severity of the message
+   * @param message the log message
+   */
+  public log(level: LogLevel, message: string): void;
+  /**
+   * Writes a log message with the {@link LogLevel.Info} log level.
+   * @param message the log message
+   */
+  public log(message: string): void;
+  public log(p0: LogLevel | string, p1?: string, meta?: any) {
+    const logLevel = isLogLevel(p0) ? p0 : LogLevel.Info;
+    const message = isLogLevel(p0) && p1 ? p1 : p0;
+    this.logger.log(logLevel, message, meta);
+  }
+
+  /**
+   * Adds default metadata to every log message.
+   * @param correlationId the log message
+   */
+  public setDefaultMeta = (correlationId: string): void => {
+    this.logger.defaultMeta = { correlationId };
+  };
+
+  /**
+   * Writes a log message with the {@link LogLevel.Error} log level.
+   * @param message the log message
+   */
+  public error = (message: string): void => {
+    this.log(LogLevel.Error, message);
+  };
+
+  /**
+   * Writes a log message with the {@link LogLevel.Warn} log level.
+   * @param message the log message
+   */
+  public warn = (message: string): void => {
+    this.log(LogLevel.Warn, message);
+  };
+
+  /**
+   * Writes a log message with the {@link LogLevel.Info} log level.
+   * @param message the log message
+   */
+  public info = (message: string): void => {
+    this.log(LogLevel.Info, message);
+  };
+
+  /**
+   * Writes a log message with the {@link LogLevel.HTTP} log level.
+   * @param message the log message
+   */
+  public http = (message: string): void => {
+    this.log(LogLevel.HTTP, message);
+  };
+
+  /**
+   * Writes a log message with the {@link LogLevel.Verbose} log level.
+   * @param message the log message
+   */
+  public verbose = (message: string): void => {
+    this.log(LogLevel.Verbose, message);
+  };
+
+  /**
+   * Writes a log message with the {@link LogLevel.Debug} log level.
+   * @param message the log message
+   */
+  public debug = (message: string): void => {
+    this.log(LogLevel.Debug, message);
+  };
+
+  /**
+   * Writes a log message with the {@link LogLevel.Silly} log level.
+   * @param message the log message
+   */
+  public silly = (message: string): void => {
+    this.log(LogLevel.Silly, message);
+  };
+}
