@@ -7,7 +7,7 @@
     "build": "lerna run build",
     "test": "lerna run test",
     "clean": "lerna run clean",
-    "lint": "eslint . --ext .ts --fix --quiet",
+    "lint": "eslint . --ext .js,.ts --fix --quiet",
     "prepare": "husky install",
     "prettier:check": "node node_modules/.bin/prettier --check \"**/*.{js,json,ts,yml,yaml}\"",
     "prettier:write": "node node_modules/.bin/prettier --write \"**/*.{js,json,ts,yml,yaml}\""
